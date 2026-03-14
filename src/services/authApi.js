@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = '/api';
+// Use the deployed Render URL in production, and the local proxy in development
+const API_URL = import.meta.env.PROD ? 'https://reciepe-app-q1im.onrender.com/api' : '/api';
 
 // Auth API calls
 export const registerUser = async ({ name, email, password }) => {
