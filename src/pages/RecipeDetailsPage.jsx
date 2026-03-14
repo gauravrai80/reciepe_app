@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getRecipeById } from '../services/api';
+import { getRecipeByIdApi } from '../services/authApi';
 import { useFavorites } from '../hooks/useFavorites';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
@@ -19,7 +20,36 @@ const RecipeDetailsPage = () => {
             setError(null);
 
             try {
-                const data = await getRecipeById(id);
+                let data = null;
+                // Check if ID is a MongoDB ObjectId (24 hex characters)
+                if (id && id.length === 24) {
+                    try {
+                        const customRecipe = await getRecipeByIdApi(id);
+                        if (customRecipe) {
+                            // Map custom recipe to TheMealDB format
+                            data = {
+                                idMeal: customRecipe._id,
+                                strMeal: customRecipe.title,
+                                strMealThumb: customRecipe.imageUrl || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                                strCategory: customRecipe.category || 'Other',
+                                strArea: 'Custom',
+                                strInstructions: customRecipe.instructions,
+                                strYoutube: customRecipe.youtubeUrl || '',
+                            };
+                            // Add ingredients
+                            customRecipe.ingredients.forEach((ing, index) => {
+                                data[`strIngredient${index + 1}`] = ing;
+                                data[`strMeasure${index + 1}`] = ''; // No strict measures in our simple schema
+                            });
+                        }
+                    } catch (err) {
+                        console.error("Failed to fetch custom recipe", err);
+                    }
+                } else {
+                    // Fetch from TheMealDB
+                    data = await getRecipeById(id);
+                }
+
                 if (data) {
                     setRecipe(data);
                 } else {

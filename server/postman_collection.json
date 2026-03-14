@@ -1,0 +1,358 @@
+{
+	"info": {
+		"_postman_id": "c76a94f6-7b25-4c0d-bdd5-3a04a60b943d",
+		"name": "Recipe Explorer API",
+		"description": "Comprehensive API documentation for the Recipe Explorer application. This collection includes endpoints for Authentication, Favorites, and full Recipe CRUD operations.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Registers a new user and returns a JWT token."
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Authenticates a user and returns a JWT token."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/me",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"me"
+							]
+						},
+						"description": "Retrieves the currently authenticated user based on the provided JWT token."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Recipes",
+			"item": [
+				{
+					"name": "Create Recipe",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Spaghetti Bolognese\",\n    \"description\": \"A classic Italian pasta dish.\",\n    \"ingredients\": [\n        \"Spaghetti\",\n        \"Ground Beef\",\n        \"Tomato Sauce\",\n        \"Garlic\",\n        \"Onion\"\n    ],\n    \"instructions\": \"1. Boil pasta.\\n2. Brown the beef with onions and garlic.\\n3. Add tomato sauce and simmer.\\n4. Serve over pasta.\",\n    \"prepTime\": 45,\n    \"category\": \"Italian\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/recipes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"recipes"
+							]
+						},
+						"description": "Creates a new recipe. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Recipes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/recipes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"recipes"
+							]
+						},
+						"description": "Retrieves all recipes from the database."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Recipe by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/recipes/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"recipes",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "REPLACE_WITH_RECIPE_ID",
+									"description": "The ID of the recipe"
+								}
+							]
+						},
+						"description": "Retrieves a single recipe by its ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Recipe",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"prepTime\": 50,\n    \"category\": \"Pasta\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/recipes/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"recipes",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "REPLACE_WITH_RECIPE_ID",
+									"description": "The ID of the recipe"
+								}
+							]
+						},
+						"description": "Updates an existing recipe. User must be the owner. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Recipe",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/recipes/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"recipes",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "REPLACE_WITH_RECIPE_ID",
+									"description": "The ID of the recipe"
+								}
+							]
+						},
+						"description": "Deletes a recipe. User must be the owner. Requires authentication."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Favorites",
+			"item": [
+				{
+					"name": "Get Favorites",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/favorites",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"favorites"
+							]
+						},
+						"description": "Retrieves the logged-in user's favorite recipe IDs."
+					},
+					"response": []
+				},
+				{
+					"name": "Add Favorite",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"recipeId\": \"12345\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/favorites",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"favorites"
+							]
+						},
+						"description": "Adds a recipe ID to the user's favorites."
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Favorite",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/favorites/:recipeId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"favorites",
+								":recipeId"
+							],
+							"variable": [
+								{
+									"key": "recipeId",
+									"value": "12345",
+									"description": "The ID of the recipe to remove"
+								}
+							]
+						},
+						"description": "Removes a recipe ID from the user's favorites."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "YOUR_JWT_TOKEN_HERE",
+			"type": "string"
+		}
+	]
+}
